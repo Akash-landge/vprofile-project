@@ -4,8 +4,14 @@ pipeline {
     environment {
         ARTVERSION = "${env.BUILD_ID}"
     }
-	
+
     stages {
+        stage('Pull Code from Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Akash-landge/vprofile-project'
+            }
+        }
+
         stage('BUILD') {
             steps {
                 sh 'mvn clean install -DskipTests'
