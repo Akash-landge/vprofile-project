@@ -1,12 +1,10 @@
-# Use Maven image to build
-FROM maven:3.8.6-openjdk-17 AS builder
+FROM maven:3.8.8 AS builder
 WORKDIR /app
 COPY . .
-RUN mvn clean package -DskipTests
+RUN mvn clean install
 
-# Use JDK base to run the app
+# Use OpenJDK for runtime
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
-
+COPY --from=builder /app/target/myapp.jar .
+CMD ["java", "-jar", "myapp.jar"]
